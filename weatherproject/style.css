@@ -1,0 +1,215 @@
+/* ---------- Reset & Base ---------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body, #weather-body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+  background: linear-gradient(135deg, #74ebd5, #acb6e5);
+}
+
+/* Large, comfy typography */
+:root {
+  --card-bg: rgba(255, 255, 255, 0.14);
+  --card-stroke: rgba(255, 255, 255, 0.35);
+  --blur: 16px;
+  --shadow: 0 18px 50px rgba(0,0,0,.25);
+  --radius: 22px;
+}
+
+/* ---------- Container (glass card) ---------- */
+.container {
+  width: 100%;
+  max-width: 760px;            /* a bit wider for “big look” */
+  background: var(--card-bg);
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+  border-radius: var(--radius);
+  padding: 44px 38px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--card-stroke);
+}
+
+/* ---------- Heading ---------- */
+.container h1 {
+  font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+  letter-spacing: 1.5px;
+  font-weight: 800;
+  margin-bottom: 28px;
+  text-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
+
+/* ---------- Controls (input + buttons) ---------- */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.controls input {
+  flex: 1;
+  min-width: 260px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.4);
+  outline: none;
+  font-size: 1.15rem;
+  color: #1b1f2a;
+  background: rgba(255,255,255,.9);
+  box-shadow: 0 10px 24px rgba(0,0,0,.16);
+}
+
+.controls input::placeholder { color: #5b6270; }
+
+.controls button {
+  padding: 16px 22px;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  box-shadow: 0 12px 26px rgba(0,0,0,.22);
+  transition: transform .18s ease, box-shadow .18s ease, translate .18s ease;
+  will-change: transform;
+}
+
+.controls button:hover { transform: scale(1.06) translateY(-1px); }
+.controls button:active { transform: scale(0.98); }
+
+/* ---------- Result Card ---------- */
+.result {
+  background: rgba(255,255,255,.18);
+  -webkit-backdrop-filter: blur(calc(var(--blur) + 4px));
+  backdrop-filter: blur(calc(var(--blur) + 4px));
+  border: 1px solid var(--card-stroke);
+  border-radius: 18px;
+  padding: 28px;
+  min-height: 140px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 10px 30px rgba(0,0,0,.18);
+  display: grid;
+  place-items: center;
+  gap: 10px;
+}
+
+/* Works even if your JS injects plain text */
+.result > * {
+  max-width: 100%;
+  text-align: center;
+}
+
+/* If your JS injects headings / paragraphs */
+.result h2, .result h3 {
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: .5px;
+  text-shadow: 0 4px 12px rgba(0,0,0,.25);
+}
+.result p { font-size: 1.2rem; line-height: 1.8rem; opacity: .95; }
+
+/* If your JS injects a “temperature” number anywhere */
+.result .temp, .result .temperature, .result [data-temp] {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+/* If your JS injects a description */
+.result .desc, .result .description, .result [data-desc] {
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  font-style: italic;
+  opacity: .95;
+}
+
+/* Generic key/value lines (covers many backends) */
+.result .row, .result li, .result dt, .result dd {
+  font-size: 1.1rem;
+  line-height: 1.9rem;
+}
+
+/* If backend outputs a list */
+.result ul, .result ol { list-style: none; display: grid; gap: 6px; padding: 0; }
+
+/* If backend outputs a simple table */
+.result table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.result th, .result td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.25);
+  text-align: left;
+  font-size: 1.05rem;
+}
+.result tr:last-child td { border-bottom: 0; }
+
+/* Optional icon styling if your backend injects an <img> */
+.result img.icon, .result .icon img {
+  width: clamp(48px, 8vw, 84px);
+  height: auto;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,.25));
+}
+
+/* Result section text style */
+.result {
+  color: #fff; /* Bright white text */
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4); /* glow effect */
+}
+
+/* City name / Heading */
+.result h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: #ffeb3b;  /* bright yellow */
+}
+
+/* Temperature */
+.result .temp {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #ff5722; /* bright orange-red */
+  margin: 12px 0;
+}
+
+/* Description (e.g. Sunny, Rainy) */
+.result .desc {
+  font-size: 1.6rem;
+  font-style: italic;
+  color: #03a9f4; /* sky blue */
+  margin-bottom: 12px;
+}
+
+/* Humidity / extra info */
+.result .humidity,
+.result .wind,
+.result p {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #620fe7;
+  margin-top: 6px;
+}
+
+
+/* ---------- Small Enhancements ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .controls button { transition: none; }
+}
+
+/* Focus outlines for accessibility */
+.controls input:focus,
+.controls button:focus {
+  outline: 3px solid rgba(255,255,255,.75);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255,255,255,.35);
+}
