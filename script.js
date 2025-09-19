@@ -1,4 +1,4 @@
-const apiKey = "20cc253959113279e8ad79ec90820797"; // ← Yahan apna OpenWeatherMap API key daalein
+const apiKey = "20cc253959113279e8ad79ec90820797"; // ← Apna OpenWeatherMap API key yahan dalein
 
 function setWeatherBackground(weather) {
     const body = document.getElementById('weather-body');
@@ -52,7 +52,10 @@ document.getElementById('searchBtn').addEventListener('click', () => {
     if(city){
         fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`)
             .then(res => res.json())
-            .then(showWeather)
+            .then(data => {
+                if(data.cod !== 200) alert("City not found!");
+                else showWeather(data);
+            })
             .catch(err => console.error(err));
     } else {
         alert("Please enter a city name.");
@@ -66,10 +69,14 @@ document.getElementById('locBtn').addEventListener('click', () => {
             const { latitude, longitude } = pos.coords;
             fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`)
                 .then(res => res.json())
-                .then(showWeather)
+                .then(data => {
+                    if(data.cod !== 200) alert("Location weather not found!");
+                    else showWeather(data);
+                })
                 .catch(err => console.error(err));
         });
     } else {
         alert("Geolocation is not supported by this browser.");
     }
 });
+
