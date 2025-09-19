@@ -1,3 +1,5 @@
+const apiKey = "20cc253959113279e8ad79ec90820797"// ← Yahan apna OpenWeatherMap API key daalein
+
 function setWeatherBackground(weather) {
     const body = document.getElementById('weather-body');
     let backgroundImage = '';
@@ -29,6 +31,11 @@ function setWeatherBackground(weather) {
 
 function showWeather(data) {
     const result = document.getElementById('result');
+    if (data.cod !== 200) {
+        result.innerHTML = `<p>City not found or API error!</p>`;
+        return;
+    }
+
     result.innerHTML = `
         <h2>${data.name}</h2>
         <p>Temperature: ${data.main.temp}°C</p>
@@ -39,21 +46,23 @@ function showWeather(data) {
     setWeatherBackground(data.weather[0].main);
 }
 
+// Search by city
 document.getElementById('searchBtn').addEventListener('click', () => {
     const city = document.getElementById('city').value;
     if (city) {
-        fetch(`getWeather.php?city=${city}`)
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`)
             .then(res => res.json())
             .then(showWeather)
             .catch(err => console.error(err));
     }
 });
 
+// Search by geolocation
 document.getElementById('locBtn').addEventListener('click', () => {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
             const { latitude, longitude } = pos.coords;
-            fetch(`getWeather.php?lat=${latitude}&lon=${longitude}`)
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`)
                 .then(res => res.json())
                 .then(showWeather)
                 .catch(err => console.error(err));
@@ -62,3 +71,5 @@ document.getElementById('locBtn').addEventListener('click', () => {
         alert("Geolocation is not supported by this browser.");
     }
 });
+
+
