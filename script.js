@@ -1,4 +1,4 @@
-const apiKey = "20cc253959113279e8ad79ec90820797"// ← Yahan apna OpenWeatherMap API key daalein
+const apiKey = "20cc253959113279e8ad79ec90820797"; // ← Yahan apna OpenWeatherMap API key daalein
 
 function setWeatherBackground(weather) {
     const body = document.getElementById('weather-body');
@@ -48,12 +48,14 @@ function showWeather(data) {
 
 // Search by city
 document.getElementById('searchBtn').addEventListener('click', () => {
-    const city = document.getElementById('city').value;
-    if (city) {
-        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`)
+    const city = document.getElementById('city').value.trim();
+    if(city){
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`)
             .then(res => res.json())
             .then(showWeather)
             .catch(err => console.error(err));
+    } else {
+        alert("Please enter a city name.");
     }
 });
 
@@ -71,5 +73,3 @@ document.getElementById('locBtn').addEventListener('click', () => {
         alert("Geolocation is not supported by this browser.");
     }
 });
-
-
